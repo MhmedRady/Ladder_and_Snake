@@ -29,10 +29,12 @@ namespace ladder_and_snake
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+
+
             this.button1.Visible = false;
             for (int i = 1; i <= 6; i++)
             {
-                Debug.WriteLine(Form1.randDice(i));
                 this.pictureDiceBox.Image = Image.FromFile(Form1.getFilePath($@"images\dice\dice_{Form1.randDice(i)}.jpg"));
                 this.pictureDiceBox.Refresh();
                 Thread.Sleep(800);
@@ -44,9 +46,13 @@ namespace ladder_and_snake
             this.pictureDiceBox.Image = Image.FromFile(Form1.getFilePath($@"images\dice\dice_{dice}.jpg"));
             this.button1.Enabled = true;
             this.updatePlayerScore();
+            /*
             Debug.WriteLine(Player);
             Debug.WriteLine(Player_1);
             Debug.WriteLine(Player_2);
+            */
+            //this.player1Box.Top -= (this.player1Box.Height * 1);
+            
             this.Player = !this.Player;
         }
 
@@ -56,13 +62,29 @@ namespace ladder_and_snake
             {
                 Player_1 = Player_1 + dice > 100 ? 100 : Player_1 + dice;
                 this.Player_1_Score.Text = Player_1.ToString();
+                //this.player1Box.Left = dice == 1 ? (this.player1Box.Width * 2) - 20 : (this.player1Box.Width * dice) - 20;
+                this.player2Box.Visible = !this.player2Box.Visible ? true : false;
+                Debug.WriteLine(Player_1);
+                this.get_player_postion(Player_1);
             }
             else
             {
                 Player_2 = Player_2 + dice > 100 ? 100 : Player_2 + dice;
                 this.Player_2_Score.Text = Player_2.ToString();
+                //this.player2Box.Left = dice == 1 ? (this.player2Box.Width * 2) - 20 : (this.player2Box.Width * dice) - 20;
+                Debug.WriteLine(Player_2);
+                this.get_player_postion(Player_2);
             }
             //this.Player = !this.Player;
+        }
+
+        public  void get_player_postion(int score)
+        {
+            float postion = (float)score /10;
+            int row = postion <1?1: (int)Math.Floor(postion);
+            string col = postion.ToString();
+            Debug.WriteLine($"Row: {row}");
+            Debug.WriteLine($"Col: {col[col.Length-1]}");  
         }
 
         private void pictureDiceBox_Click(object sender, EventArgs e)
