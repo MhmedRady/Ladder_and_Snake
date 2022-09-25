@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace ladder_and_snake
 {
@@ -42,17 +43,20 @@ namespace ladder_and_snake
             this.panel1 = new System.Windows.Forms.Panel();
             this.player2Box = new System.Windows.Forms.PictureBox();
             this.player1Box = new System.Windows.Forms.PictureBox();
+            this.playerBox = new System.Windows.Forms.PictureBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureDiceBox)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.player2Box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1Box)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playerBox)).BeginInit();
             this.SuspendLayout();
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Window;
+            this.panel2.Controls.Add(this.playerBox);
             this.panel2.Controls.Add(this.pictureDiceBox);
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Controls.Add(this.button1);
@@ -65,7 +69,7 @@ namespace ladder_and_snake
             // 
             this.pictureDiceBox.BackgroundImage = global::Ladder_And_Snake.Properties.Resources.dice_0;
             this.pictureDiceBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureDiceBox.Location = new System.Drawing.Point(68, 87);
+            this.pictureDiceBox.Location = new System.Drawing.Point(68, 160);
             this.pictureDiceBox.Name = "pictureDiceBox";
             this.pictureDiceBox.Size = new System.Drawing.Size(186, 179);
             this.pictureDiceBox.TabIndex = 3;
@@ -77,7 +81,7 @@ namespace ladder_and_snake
             this.panel3.Controls.Add(this.Player_1_Score);
             this.panel3.Controls.Add(this.label2);
             this.panel3.Controls.Add(this.label1);
-            this.panel3.Location = new System.Drawing.Point(68, 312);
+            this.panel3.Location = new System.Drawing.Point(68, 370);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(186, 122);
             this.panel3.TabIndex = 2;
@@ -129,7 +133,7 @@ namespace ladder_and_snake
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.Window;
-            this.button1.Location = new System.Drawing.Point(68, 475);
+            this.button1.Location = new System.Drawing.Point(68, 528);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(186, 47);
             this.button1.TabIndex = 1;
@@ -181,6 +185,16 @@ namespace ladder_and_snake
             this.player1Box.TabIndex = 0;
             this.player1Box.TabStop = false;
             // 
+            // playerBox
+            // 
+            this.playerBox.BackColor = System.Drawing.Color.White;
+            this.playerBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.playerBox.Location = new System.Drawing.Point(110, 34);
+            this.playerBox.Name = "playerBox";
+            this.playerBox.Size = new System.Drawing.Size(105, 101);
+            this.playerBox.TabIndex = 4;
+            this.playerBox.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -197,6 +211,7 @@ namespace ladder_and_snake
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.player2Box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.player1Box)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playerBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -208,9 +223,9 @@ namespace ladder_and_snake
             return dice == x ? r.Next(1, 7) : dice;
         }
 
-        public static string getFilePath(string dir = "", bool _static = true)
+        public static Image getImagePath(string dir = "", bool _static = true)
         {
-            return AppDomain.CurrentDomain.BaseDirectory.Split(new string[] { "bin" }, @StringSplitOptions.None)[0] + (_static ? $"static\\{dir}" : dir);
+             return Image.FromFile(AppDomain.CurrentDomain.BaseDirectory.Split(new string[] { "bin" }, @StringSplitOptions.None)[0] + (_static ? $"static\\{dir}" : dir));
         }
 
         #endregion
@@ -226,6 +241,7 @@ namespace ladder_and_snake
         private System.Windows.Forms.PictureBox pictureDiceBox;
         private System.Windows.Forms.PictureBox player1Box;
         private System.Windows.Forms.PictureBox player2Box;
+        private System.Windows.Forms.PictureBox playerBox;
     }
 }
 

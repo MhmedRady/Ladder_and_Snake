@@ -29,31 +29,37 @@ namespace ladder_and_snake
 
         private void button1_Click(object sender, EventArgs e)
         {
+            this.playerBox.Image = Form1.getImagePath($@"images\player\" + (!Player ? "2P" : "1P") + ".png");
+            this.playerBox.Refresh();
 
-
-
+            this.button1.Enabled = false;
             this.button1.Visible = false;
+
+            
             for (int i = 1; i <= 6; i++)
             {
-                this.pictureDiceBox.Image = Image.FromFile(Form1.getFilePath($@"images\dice\dice_{Form1.randDice(i)}.jpg"));
+                this.pictureDiceBox.Image = Form1.getImagePath($@"images\dice\dice_{Form1.randDice(i)}.jpg");
                 this.pictureDiceBox.Refresh();
                 Thread.Sleep(800);
             }
-            this.button1.Visible = true;
-
+            
             Debug.WriteLine("no sleep");
             this.dice = Form1.randDice(this.dice);
-            this.pictureDiceBox.Image = Image.FromFile(Form1.getFilePath($@"images\dice\dice_{dice}.jpg"));
+            this.pictureDiceBox.Image = Form1.getImagePath($@"images\dice\dice_{dice}.jpg");
+            this.button1.Visible = true;
             this.button1.Enabled = true;
             this.updatePlayerScore();
+
             /*
             Debug.WriteLine(Player);
             Debug.WriteLine(Player_1);
             Debug.WriteLine(Player_2);
             */
-            //this.player1Box.Top -= (this.player1Box.Height * 1);
+            
+            this.player1Box.Top -= (this.player1Box.Height * 5);
             
             this.Player = !this.Player;
+            
         }
 
         private void updatePlayerScore()
@@ -78,10 +84,10 @@ namespace ladder_and_snake
             //this.Player = !this.Player;
         }
 
-        public  void get_player_postion(int score)
+        public void get_player_postion(int score)
         {
             float postion = (float)score /10;
-            int row = postion <1?1: (int)Math.Floor(postion);
+            int row = postion <1?0: (int)Math.Floor(postion);
             string col = postion.ToString();
             Debug.WriteLine($"Row: {row}");
             Debug.WriteLine($"Col: {col[col.Length-1]}");  
