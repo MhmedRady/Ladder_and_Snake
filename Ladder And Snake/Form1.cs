@@ -19,9 +19,28 @@ namespace ladder_and_snake
     public partial class Form1 : Form
     {
         int dice = 0;
-        int Player_1 = 0;
-        int Player_2 = 0;
+        
         bool Player = true;
+        int lastLeft = -60;
+        IDictionary<string, int> Player_1_Position = new Dictionary<string, int>() { 
+            { "score", 0 }, { "row", 1}, { "col", 0 } 
+        };
+        IDictionary<string, int> Player_2_Position = new Dictionary<string, int>() { 
+            { "score", 0 }, { "row", 1}, { "col", 0 } 
+        };
+
+        IDictionary<string, int> ladders = new Dictionary<string, int>() {
+            { "ladder_1", 38 }, { "ladder_4", 14 }, { "ladder_9", 31 }, 
+            { "ladder_21", 42 }, { "ladder_28", 84 }, { "ladder_51", 67 },
+            { "ladder_71", 91 }, { "ladder_80", 100 }
+        };
+
+        IDictionary<string, int> snakes = new Dictionary<string, int>() {
+            { "snake_17", 7 }, { "snakes_54", 34 }, { "snake_62", 19 },
+            { "snake_64", 60 }, { "snake_87", 24 }, { "snake_93", 73 },
+            { "snake_95", 75 }, { "snake_98", 79 }
+        };
+
         public Form1()
         {
             InitializeComponent();
@@ -35,14 +54,14 @@ namespace ladder_and_snake
             this.button1.Enabled = false;
             this.button1.Visible = false;
 
-            
+            //CHANGE DICE BOX IN RANDOM FACE
             for (int i = 1; i <= 6; i++)
             {
                 this.pictureDiceBox.Image = Form1.getImagePath($@"images\dice\dice_{Form1.randDice(i)}.jpg");
                 this.pictureDiceBox.Refresh();
                 Thread.Sleep(800);
             }
-            
+
             Debug.WriteLine("no sleep");
             this.dice = Form1.randDice(this.dice);
             this.pictureDiceBox.Image = Form1.getImagePath($@"images\dice\dice_{dice}.jpg");
@@ -50,57 +69,107 @@ namespace ladder_and_snake
             this.button1.Enabled = true;
             this.updatePlayerScore();
 
-            /*
-            Debug.WriteLine(Player);
-            Debug.WriteLine(Player_1);
-            Debug.WriteLine(Player_2);
-            */
-            
-            this.player1Box.Top -= (this.player1Box.Height * 5);
-            
             this.Player = !this.Player;
-            
         }
 
         private void updatePlayerScore()
         {
             if (this.Player)
             {
-                Player_1 = Player_1 + dice > 100 ? 100 : Player_1 + dice;
-                this.Player_1_Score.Text = Player_1.ToString();
-                //this.player1Box.Left = dice == 1 ? (this.player1Box.Width * 2) - 20 : (this.player1Box.Width * dice) - 20;
-                this.player2Box.Visible = !this.player2Box.Visible ? true : false;
-                Debug.WriteLine(Player_1);
-                this.get_player_postion(Player_1);
+                Player_1_Position["score"] = Player_1_Position["score"] + dice > 100 ? 100 : Player_1_Position["score"] + dice;
+                this.Player_1_Score.Text = Player_1_Position["score"].ToString();
+
+                // CHANGE PALYER ONE POSITION
+                this.get_player_position(player1Box, (Dictionary<string, int>)this.Player_1_Position);
+                ladder((Dictionary<string, int>)this.Player_1_Position, player1Box); // CHANGE PLAYER BOX IF SCORE IN LADDERS DICTIONARY
+                snakeHead((Dictionary<string, int>)this.Player_1_Position, player1Box); // CHANGE PLAYER BOX IF SCORE IN SNAKES DICTIONARY
             }
             else
             {
-                Player_2 = Player_2 + dice > 100 ? 100 : Player_2 + dice;
-                this.Player_2_Score.Text = Player_2.ToString();
-                //this.player2Box.Left = dice == 1 ? (this.player2Box.Width * 2) - 20 : (this.player2Box.Width * dice) - 20;
-                Debug.WriteLine(Player_2);
-                this.get_player_postion(Player_2);
+                Player_2_Position["score"] = Player_2_Position["score"] + dice > 100 ? 100 : Player_2_Position["score"] + dice;
+                this.Player_2_Score.Text = Player_2_Position["score"].ToString();
+
+                // CHANGE PALYER TOW POSITION
+                this.get_player_position(player2Box, (Dictionary<string, int>)this.Player_2_Position);
+                ladder((Dictionary<string, int>)this.Player_1_Position, player1Box); // CHANGE PLAYER BOX IF SCORE IN LADDERS DICTIONARY
+                snakeHead((Dictionary<string, int>)this.Player_1_Position, player1Box); // CHANGE PLAYER BOX IF SCORE IN SNAKES DICTIONARY
             }
-            //this.Player = !this.Player;
+        }
+        // SNAKE CAHNGE PLAYER SCORE
+        public void snakeHead(Dictionary<string, int> PlayerPosition, PictureBox PlayerBox)
+        {
+            if(snakes.ContainsKey("snake_" + PlayerPosition["score"])) {
+                this.outBox.Visible = true;
+                this.outBox.BackgroundImage = Form1.getImagePath($@"images\snake.png");
+                this.outBox.Refresh();
+                Thread.Sleep(800);
+                this.get_player_position(PlayerBox, (Dictionary<string, int>)this.Player_1_Position);
+            }else
+            {
+                this.outBox.Visible = false;
+                this.outBox.Image = null;
+                this.outBox.Refresh();
+            }
         }
 
-        public void get_player_postion(int score)
+        // LADDER CAHNGE PLAYER SCORE
+        public void ladder(Dictionary<string, int> PlayerPosition, PictureBox PlayerBox)
         {
-            float postion = (float)score /10;
-            int row = postion <1?0: (int)Math.Floor(postion);
-            string col = postion.ToString();
-            Debug.WriteLine($"Row: {row}");
-            Debug.WriteLine($"Col: {col[col.Length-1]}");  
+            if (ladders.ContainsKey("ladder_" + PlayerPosition["score"]))
+            {
+                this.outBox.Visible = true;
+                this.outBox.BackgroundImage = Form1.getImagePath($@"images\ladder.png");
+                this.outBox.Refresh();
+                Thread.Sleep(800);
+                this.get_player_position(PlayerBox, (Dictionary<string, int>)this.Player_1_Position);
+            }
+            else
+            {
+                this.outBox.Visible = false;
+                this.outBox.Image = null;
+                this.outBox.Refresh();
+            }
         }
 
-        private void pictureDiceBox_Click(object sender, EventArgs e)
+        public bool winnerPlayer()
         {
-
+            this.outBox.Visible = true;
+            this.outBox.BackgroundImage = Form1.getImagePath($@"images\you-win.jpg");
+            this.outBox.Refresh();
+            Thread.Sleep(2000);
+            Application.Exit();
+            return true;
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        public void get_player_position(PictureBox PlayerBox, Dictionary<string, int> PlayerPosition)
         {
 
+            if(PlayerPosition["score"] >= 100) winnerPlayer();
+            float position = (float)PlayerPosition["score"] / 10;
+            int row = position == 1?1:(int)Math.Floor(position)+1; // NEW ROW NUMBER
+            Debug.WriteLine($"left before: {PlayerBox.Left}");
+            Array _col = position.ToString().Split('.');
+            int col = position == 1 || _col.Length == 1 ?10: int.Parse(position.ToString().Split('.')[1]); // NEW ROW NUMBER
+
+            int newCol = col + PlayerPosition["col"];
+
+            col = newCol > 10 ? newCol - col: col ;
+
+            if (PlayerPosition["row"] != row)
+            {
+                PlayerBox.Top -= 40 * row; // Move To Up ROW
+                PlayerPosition["row"] = row;
+            }
+
+            PlayerBox.Left = lastLeft;
+            if (row%2 != 0) {
+                PlayerBox.Left += PlayerBox.Width * col; //Move Player Box To Right
+            }
+            else{
+                PlayerBox.Left = 780 - 80 * col; //Move Player Box To Left
+            }
+            PlayerPosition["col"] = col;
+            Debug.WriteLine($"last col: {PlayerPosition["col"]}");
         }
     }
 }

@@ -95,5 +95,11 @@
   <ItemGroup>
     <None Include="static\images\player\2P.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="static\images\snake.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="static\images\ladder.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
